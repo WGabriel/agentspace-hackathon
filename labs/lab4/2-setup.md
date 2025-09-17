@@ -1,21 +1,18 @@
 # Setup
 - 👉 Click **Activate Cloud Shell** at the top of the Google Cloud console (It's the terminal shape icon at the top of the Cloud Shell pane).
-![Image 1](images/03-01-cloud-shell_1440.png)
+    ![Image 1](images/03-01-cloud-shell_1440.png)
 - 👉 Click on the "**Open Editor**" button (it looks like an open folder with a pencil). This will open the Cloud Shell Code Editor in the window. You'll see a file explorer on the left side.
-![Image 2](images/03-02-open-editor_1440.png)]
+    ![Image 2](images/03-02-open-editor_1440.png)
 - 👉 Click on the **Cloud Code Sign-in** button in the bottom status bar as shown. Authorize the plugin as instructed. If you see *Cloud Code - no project* in the status bar, select that then in the drop down ‘Select a Google Cloud Project' and then select the specific Google Cloud Project from the list of projects that you created. 
-![Image 3](images/03-03-login-project_1440.png)
+    ![Image 3](images/03-03-login-project_1440.png)
 - 👉 Find your Google Cloud Project ID:
   1. Open the Google Cloud Console: `https://console.cloud.google.com`
   2. Select the project you want to use for this workshop from the project dropdown at the top of the page.
   3. Your Project ID is displayed in the Project info card on the Dashboard.
-![Image 4](images/03-04-project-id_1440.png)]
+    ![Image 4](images/03-04-project-id_1440.png)
 - 👉 Open the terminal in the cloud IDE.
-![Image 5](images/03-05-new-terminal_1440.png)]
-- 👉💻 In the terminal, verify that you're already authenticated and that the project is set to your project ID using the following command:
-
-`gcloud auth list`
-
+    ![Image 5](images/03-05-new-terminal_1440.png)]
+- 👉💻 In the terminal, verify that you're already authenticated and that the project is set to your project ID using the following command: `gcloud auth list`
 - 👉💻 Clone the instavibe-bootstrap project from GitHub:
 
 ```bash
