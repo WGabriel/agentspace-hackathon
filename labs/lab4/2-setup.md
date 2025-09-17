@@ -1,17 +1,17 @@
 # Setup
-- 👉 Click **Activate Cloud Shell** at the top of the Google Cloud console (It's the terminal shape icon at the top of the Cloud Shell pane).
+- 👉 Click **Activate Cloud Shell** at the top of the Google Cloud console (It's the terminal shape icon at the top of the Cloud Shell pane).  
     ![Image 1](images/03-01-cloud-shell_1440.png)
-- 👉 Click on the "**Open Editor**" button (it looks like an open folder with a pencil). This will open the Cloud Shell Code Editor in the window. You'll see a file explorer on the left side.
+- 👉 Click on the "**Open Editor**" button (it looks like an open folder with a pencil). This will open the Cloud Shell Code Editor in the window. You'll see a file explorer on the left side.  
     ![Image 2](images/03-02-open-editor_1440.png)
-- 👉 Click on the **Cloud Code Sign-in** button in the bottom status bar as shown. Authorize the plugin as instructed. If you see *Cloud Code - no project* in the status bar, select that then in the drop down ‘Select a Google Cloud Project' and then select the specific Google Cloud Project from the list of projects that you created. 
+- 👉 Click on the **Cloud Code Sign-in** button in the bottom status bar as shown. Authorize the plugin as instructed. If you see *Cloud Code - no project* in the status bar, select that then in the drop down ‘Select a Google Cloud Project' and then select the specific Google Cloud Project from the list of projects that you created.  
     ![Image 3](images/03-03-login-project_1440.png)
 - 👉 Find your Google Cloud Project ID:
   1. Open the Google Cloud Console: `https://console.cloud.google.com`
   2. Select the project you want to use for this workshop from the project dropdown at the top of the page.
-  3. Your Project ID is displayed in the Project info card on the Dashboard.
+  3. Your Project ID is displayed in the Project info card on the Dashboard.  
     ![Image 4](images/03-04-project-id_1440.png)
-- 👉 Open the terminal in the cloud IDE.
-    ![Image 5](images/03-05-new-terminal_1440.png)]
+- 👉 Open the terminal in the cloud IDE.  
+    ![Image 5](images/03-05-new-terminal_1440.png)  
 - 👉💻 In the terminal, verify that you're already authenticated and that the project is set to your project ID using the following command: `gcloud auth list`
 - 👉💻 Clone the instavibe-bootstrap project from GitHub:
 
@@ -140,8 +140,8 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
   --role="roles/logging.viewer"
 ```
 
-- 👉 Validate result in your IAM console.
-![Image 7](images/03-07-iam_1440.png))
+- 👉 Validate result in your IAM console.  
+    ![Image 7](images/03-07-iam_1440.png)
 - 👉💻 Run the following commands in the terminal to create a Artifact Registry repository. All Docker images for our agents, the MCP server, and the InstaVibe application are stored here before deployment to Cloud Run or Agent Engine.
 
 ```bash
@@ -154,20 +154,20 @@ gcloud artifacts repositories create $REPO_NAME \
 
 Setup Map platform for API Keys
 To use Google Maps services in your InstaVibe application, you need to create an API key and restrict it appropriately.
-- 👉 In a new tab, go to APIs & Services > Credentials. On the "Credentials" page, click the + CREATE CREDENTIALS button at the top. Select API key from the dropdown menu.
-![Image 6](images/03-06-credential_1440.png)
+- 👉 In a new tab, go to APIs & Services > Credentials. On the "Credentials" page, click the + CREATE CREDENTIALS button at the top. Select API key from the dropdown menu.  
+    ![Image 6](images/03-06-credential_1440.png)
 - 👉 A dialog box will appear showing your newly created API key. You'll need it later for your application configuration.
 - 👉 Click CLOSE on the "API key created" dialog.
-- 👉 You will see your new API key listed (e.g., "API key 1"). Click on the three dots on the right select Edit API key to open the "Restrict and rename API key" page.
-![Image 8](images/03-08-edit-from-list_1440.png)
+- 👉 You will see your new API key listed (e.g., "API key 1"). Click on the three dots on the right select Edit API key to open the "Restrict and rename API key" page.  
+    ![Image 8](images/03-08-edit-from-list_1440.png)
 - 👉 In the Name field at the top, change the default name to: Maps Platform API Key (🚨🚨IMPORTANT🚨🚨 Please use this name!)
 `Maps Platform API Key`
 - 👉 Under the "Application restrictions" section ensure None is selected.
 - 👉 Under the "API restrictions" section, select the Restrict key radio button.
-- 👉 Click the Select APIs dropdown menu. In the search box that appears, type `Maps JavaScript API` and select it from the list.
-![Image 9](images/03-09-key-result_1440.png)
+- 👉 Click the Select APIs dropdown menu. In the search box that appears, type `Maps JavaScript API` and select it from the list.  
+    ![Image 9](images/03-09-key-result_1440.png)
 - 👉 Click OK.
-- 👉 Click the SAVE button at the bottom of the page.
-![Image 10](images/03-10-restriction_1440.png)
+- 👉 Click the SAVE button at the bottom of the page.  
+    ![Image 10](images/03-10-restriction_1440.png)
 
 You have now successfully created an API key named "Maps Platform API Key," restricted it to only allow usage of the "Maps JavaScript API," and ensured the API is enabled for your project.
