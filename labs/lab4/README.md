@@ -1,5 +1,4 @@
 # Google's Agent Stack in Action: ADK, A2A, MCP on Google Cloud
-*Last updated: September 17, 2025*  
 *Originally authored by: Christina Lin (linchr@)*  
 *Adapted for the Agentspace Hackathon by: Sanchit Alekh (sanchitalekh@)*  
 
