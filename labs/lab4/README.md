@@ -1,5 +1,13 @@
 # Travel Concierge
 
+---
+> **🚀 Hackathon Participants, Start Here! 🚀**
+>
+> Welcome to the Travel Concierge workshop! For a guided experience, please open and follow our step-by-step guide:
+>
+> ### 👉 [**HACKATHON.md**](HACKATHON.md)
+---
+
 This sample demonstrates the use of Agent Development Kit to deliver a new user experience for Travelers. A cohort of agents mimics the notion of having a personal travel concierge, taking care of a traveler's needs: from trip conception, planning and booking, to preparing for the trip, getting help to get from point A to B during the trip, while simultaneously acting as an informative guide.
 
 This example includes illustrations with ADK supported tools such as Google Places API, Google Search Grounding and MCP.
