@@ -1,6 +1,6 @@
 # Google Gemini Enterprise, ADK & MCP Hackathon 🚀
 
-Welcome to our hands-on hackathon dedicated to exploring and building with Google's powerful agent development tools: **Agentspace**, the **Agent Development Kit (ADK)**, and **Multi-agent Control Plane (MCP)**.
+Welcome to our hands-on hackathon dedicated to exploring and building with Google's powerful agent development tools: **Gemini Enterprise**, the **Agent Development Kit (ADK)**, and **Multi-agent Control Plane (MCP)**.
 
 This repository contains the agenda and resources for our session. Throughout the day, you'll participate in four guided labs and a final group brainstorming exercise to apply your new skills.
 
@@ -11,7 +11,7 @@ This repository contains the agenda and resources for our session. Throughout th
 | Time          | Topic                                     | Presenter / Notes                                                                                                                                                                                                                                                               |
 | :------------ | :---------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 09:00-09:30   | Arrival & Breakfast                       | Arrival at our Munich office.<br> Address: Google Germany GmbH, Erika-Mann-Str. 33, 80635 Munich. <br> Room: "10x". We will serve a breakfast there.                                                                                                                                                                           |
-| 09:30-10:00   | Agentspace Frontend Demo                  | A short presentation and demo of the Agentspace frontend.                                                                                                                                                                                                                       |
+| 09:30-10:00   | Gemini Enterprise Frontend Demo                  | A short presentation and demo of the Gemini Enterprise frontend.                                                                                                                                                                                                                       |
 | 10:00-11:00   | **Lab 1:**  | - We will provide you with access your temporary Devstar Environment. <br>- We'll show you how to create your own no-code/low-code agent. Be creative!                                                                                                                                                      |
 | 11:00-12:00   | **Lab 2:** TBD                 | - function calling<br>- notebooks<br>- imagen<br>- VEO                                                                                                                                                                    |
 | 12:00-13:00   | **Lunch**                                     |                                                                                                                                                                                                                                                                            |
@@ -27,7 +27,7 @@ This repository contains the agenda and resources for our session. Throughout th
 This hackathon is structured around four key labs. Please follow the links below for detailed tutorials for each section.
 
 * [**Lab 1: Data Ingestion**](./labs/lab1/README.md)
-* [**Lab 2: No Code / Low Code Agent in Agentspace**](./labs/lab2/README.md)
+* [**Lab 2: No Code / Low Code Agent in Gemini Enterprise**](./labs/lab2/README.md)
 * [**Lab 3: Agent Development Kit (ADK)**](./labs/lab3/README.md)
 * [**Lab 4: Advanced Agents & Multi-agent Systems**](./labs/lab4/README.md)
 
