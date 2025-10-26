@@ -20,7 +20,7 @@ from google.genai.types import GenerateContentConfig
 from travel_concierge.shared_libraries import types
 from travel_concierge.sub_agents.planning import prompt
 from travel_concierge.tools.memory import memorize
-
+from travel_concierge.tools.search import google_search_grounding
 
 itinerary_agent = Agent(
     model="gemini-2.5-flash",
@@ -97,6 +97,7 @@ planning_agent = Agent(
         AgentTool(agent=hotel_room_selection_agent),
         AgentTool(agent=itinerary_agent),
         memorize,
+        google_search_grounding,
     ],
     generate_content_config=GenerateContentConfig(
         temperature=0.1, top_p=0.5
