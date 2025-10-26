@@ -17,6 +17,7 @@ dependencies = [
     "python-dotenv>=1.0.1",
     "google-genai>=1.16.1",
     "google-adk>=1.0.0",
+    "mcp[cli]>=1.17.0",
 ]
 
 requires-python = ">=3.10,<3.13"
