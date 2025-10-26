@@ -1,19 +1,92 @@
-# Travel Concierge
+# 🚀 Travel Concierge Hackathon Guide 🚀
+
+Welcome, participants! This guide will walk you through setting up, running, and modifying your very own AI-powered Travel Concierge. Our goal is to get you hands-on with agent development as quickly as possible.
+
+Let's get started!
 
 ---
 
-> **🚀 Hackathon Participants, Start Here! 🚀**
->
-> Welcome to the Travel Concierge workshop! For a guided experience, please open and follow our step-by-step guide:
->
-> ### 👉 [**HACKATHON.md**](HACKATHON.md)
+## Lab 4.1: Quick Start - Running Your Agent
+
+This first lab is all about getting the agent running on your machine.
+
+1.  **Run the Automated Setup Script:**
+    This script will install all the necessary dependencies for you.
+
+    ```bash
+    bash setup.sh
+    ```
+    After the script finishes, it will remind you to edit the newly created `.env` file.
+
+2.  **Configure Your Environment:**
+    Open the `.env` file in your editor and fill in the required values:
+    *   `GOOGLE_CLOUD_PROJECT`: Your Google Cloud Project ID.
+    *   `GOOGLE_PLACES_API_KEY`: Your API Key for the Google Maps Platform Places API. [Click here for instructions on how to get one](https://developers.google.com/maps/documentation/places/web-service/get-api-key).
+
+3.  **Authenticate with Google Cloud:**
+    This command allows the application to use your Google Cloud credentials.
+    ```bash
+    gcloud auth application-default login
+    ```
+
+4.  **Run the Agent!**
+    You're all set. Start the agent's web interface with this command:
+    ```bash
+    uv run adk web
+    ```
+    Now, open your browser to [http://127.0.0.1:8000](http://127.0.0.1:8000). Select `travel_concierge` from the dropdown menu, and you can start chatting with your agent!
+
+    **✅ Goal:** Successfully interact with the agent.
+    **💡 Things to Try:** Ask the agent: *"Need some destination ideas for the Americas."*
 
 ---
 
-This sample demonstrates the use of Agent Development Kit to deliver a new user experience for Travelers. A cohort of agents mimics the notion of having a personal travel concierge, taking care of a traveler's needs: from trip conception, planning and booking, to preparing for the trip, getting help to get from point A to B during the trip, while simultaneously acting as an informative guide.
+## Lab 4.2: Understanding the Code
 
-This example includes illustrations with ADK supported tools such as Google Places API, Google Search Grounding and MCP.
+Now that the agent is running, let's take a peek under the hood to see how it works.
 
+*   **Goal:** Learn to navigate the project structure and find key components.
+*   **Task:** The agent that handles initial inspiration is called the `inspiration_agent`. Your task is to find its core instructions, also known as its "prompt".
+*   **Hint:** Look inside the `travel_concierge/sub_agents/inspiration/` directory. The file you're looking for is `prompt.py`. Read through it to see how the agent is instructed to behave.
+
+---
+
+## Lab 4.3: Modifying an Agent
+
+Let's make our first change! A simple modification to the prompt can give the agent a completely new personality.
+
+*   **Goal:** Make a simple code change and observe its effect on the agent's behavior.
+*   **Task:** Let's give the `inspiration_agent` a fun personality.
+    1.  Open `travel_concierge/sub_agents/inspiration/prompt.py`.
+    2.  At the beginning of the `INSTRUCTIONS` string, add the following sentence: **"You are a friendly, enthusiastic travel guide who loves adventure."**
+    3.  Stop the `adk web` server in your terminal (with `Ctrl+C`) and restart it: `uv run adk web`.
+    4.  Chat with the agent again and ask for inspiration. Do you notice a difference in its tone?
+
+---
+
+## Lab 4.4 (Bonus): Adding a New Tool
+
+*This is an advanced, optional lab for those who finish early.*
+
+*   **Goal:** Understand how to extend an agent's capabilities by giving it a new tool.
+*   **Task:** We'll create a simple new tool that tells you the current time.
+    1.  Create a new file: `travel_concierge/tools/time.py`.
+    2.  Add the following code to `time.py`:
+        ```python
+        import datetime
+        from adk.tools import tool
+
+        @tool
+        def get_current_time() -> str:
+            """Returns the current time."""
+            return datetime.datetime.now().strftime("%H:%M:%S")
+        ```
+    3.  Now, let's give this tool to the `in_trip_agent`. Open `travel_concierge/sub_agents/in_trip/agent.py`.
+    4.  Import your new tool at the top of the file: `from travel_concierge.tools.time import get_current_time`.
+    5.  Add `get_current_time` to the list of tools passed to the `InTripAgent`.
+    6.  Restart the agent and try asking it: *"What time is it?"*
+
+---
 ## Overview
 
 A traveler's experience can be divided into two stages: pre-booking and post-booking. In this example, each stage involves the use of multiple specialized agents working together to provide the concierge experience.
@@ -75,155 +148,6 @@ Expand on the "Key Components" from above.
   * All agents and tools in this example use the Agent Development Kit's internal session state as memory.
   * The session state is used to store information such as the itinerary, and temporary AgentTools' responses.
   * There are a number of premade itineraries that can be loaded for test runs. See 'Running the Agent' below on how to run them.
-
-## Setup and Installation
-
-### Folder Structure
-
-```
-.
-├── README.md
-├── travel-concierge-arch.png
-├── pyproject.toml
-├── travel_concierge/
-│   ├── shared_libraries/
-│   ├── tools/
-│   └── sub_agents/
-│       ├── inspiration/
-│       ├── planning/
-│       ├── booking/
-│       ├── pre_trip/
-│       ├── in_trip/
-│       └── post_trip/
-├── tests/
-│   └── unit/
-├── eval/
-│   └── data/
-└── deployment/
-```
-
-### Prerequisites
-
-- Python 3.10+
-- Google Cloud Project (for Vertex AI integration)
-- API Key for [Google Maps Platform Places API](https://developers.google.com/maps/documentation/places/web-service/get-api-key)
-- Google Agent Development Kit 1.0+
-- uv: Install uv by following the instructions on the official uv [website](https://docs.astral.sh/uv/)
-  ```bash
-  curl -LsSf https://astral.sh/uv/install.sh | sh
-  ```
-
-### Installation
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/WGabriel/agentspace-hackathon.git
-   cd labs/lab4
-   ```
-
-   NOTE: From here on, all command-line instructions shall be executed under the directory  `lab-4/` unless otherwise stated.
-2. Install dependencies:
-
-   ```bash
-   uv sync
-   ```
-3. Set up Google Cloud credentials:
-
-   Otherwise:
-
-   - At the top directory `lab4/`, make a `.env` by copying `.env.example`
-   - Set the following environment variables.
-   - To use Vertex, make sure you have the Vertex AI API enabled in your project.
-
-   ```
-   # Choose Model Backend: 0 -> ML Dev, 1 -> Vertex
-   GOOGLE_GENAI_USE_VERTEXAI=1
-   # ML Dev backend config, when GOOGLE_GENAI_USE_VERTEXAI=0, ignore if using Vertex.
-   # GOOGLE_API_KEY=YOUR_VALUE_HERE
-
-   # Vertex backend config
-   GOOGLE_CLOUD_PROJECT=__YOUR_CLOUD_PROJECT_ID__
-   GOOGLE_CLOUD_LOCATION=us-central1
-
-   # Places API
-   GOOGLE_PLACES_API_KEY=__YOUR_API_KEY_HERE__
-
-   # GCS Storage Bucket name - for Agent Engine deployment test
-   GOOGLE_CLOUD_STORAGE_BUCKET=YOUR_BUCKET_NAME_HERE
-
-   # Sample Scenario Path - Default is an empty itinerary
-   # This will be loaded upon first user interaction.
-   #
-   # Uncomment one of the two, or create your own.
-   #
-   # TRAVEL_CONCIERGE_SCENARIO=travel_concierge/profiles/itinerary_seattle_example.json
-   TRAVEL_CONCIERGE_SCENARIO=travel_concierge/profiles/itinerary_empty_default.json
-   ```
-4. Authenticate your GCloud account.
-
-   ```bash
-   gcloud auth application-default login
-   ```
-5. Activate the virtual environment set up by Poetry, run:
-
-   ```bash
-   eval $(poetry env activate)
-   (travel-concierge-py3.12) $ # Virtualenv entered
-   ```
-
-   Repeat this command whenever you have a new shell, before running the commands in this README.
-
-## Running the Agent
-
-### Using `adk`
-
-ADK provides convenient ways to bring up agents locally and interact with them.
-You may talk to the agent using the CLI:
-
-```bash
-# Under the travel-concierge directory:
-adk run travel_concierge
-```
-
-or via its web interface:
-
-```bash
-# Under the travel-concierge directory:
-adk web
-```
-
-This will start a local web server on your machine. You may open the URL, select "travel_concierge" in the top-left drop-down menu, and
-a chatbot interface will appear on the right.
-
-The conversation is initially blank. For an outline on the concierge interaction, see the section [Sample Agent interaction](#sample-agent-interaction)
-
-Here is something to try:
-
-* "Need some destination ideas for the Americas"
-* After interacting with the agents for a while, you may ask: "Go ahead to planning".
-
-### Programmatic Access
-
-Below is an example of interacting with the agent as a server using Python.
-Try it under the travel-concierge directory:
-
-First, establish a quick development API server for the travel_concierge package.
-
-```bash
-adk api_server travel_concierge
-```
-
-This will start a fastapi server at http://127.0.0.1:8000.
-You can access its API docs at http://127.0.0.1:8000/docs
-
-Here is an example client that only call the server for two turns:
-
-```bash
-python tests/programmatic_example.py
-```
-
-You may notice that there are code to handle function responses. We will revisit this in the [GUI](#gui) section below.
 
 ### Sample Agent interaction
 
@@ -550,15 +474,16 @@ The following are just the starting ideas:
 - A booking agent that is less mundane and more efficient
 - For the pre-trip and in-trip agents, there are opportunities to dynamically adjusts the itinerary and resolves trip exceptions
 
-## Troubleshoot
+## Common Issues & Troubleshooting
 
-The following occasionally happens while interaction with the agent:
+*   **Issue:** `uv: command not found`
+    *   **Solution:** `uv` is not installed. Follow the official instructions here: [https://docs.astral.sh/uv/install.sh](https://docs.astral.sh/uv/install.sh).
 
-- "Malformed" function call or response, or pydantic errors - when this happens simply tell the agent to "try again".
-- If the agents tries to call a tool that doesn't exist, tell the agent that it is the "wrong tool, try again", the agent  is often able to self correct.
-- Similarly, if you have waited for a while and the agent has stopped in the middle of executing a series of actions, ask the agent "what's next" to nudge it forward.
+*   **Issue:** Agent returns a "Malformed function call" or a Pydantic error.
+    *   **Solution:** This can happen if the AI model's response isn't perfectly structured. The agent can often fix this itself. Just reply with **"try again"**.
 
-These happens occasionally, it is likely due to variations in JSON responses that requires more rigorous experimentation on prompts and generation parameters to attain more stable results. Within an application, these retries can also be built into the application as part of exception handling.
+*   **Issue:** `gcloud` authentication errors.
+    *   **Solution:** Make sure you have the Google Cloud SDK installed and have successfully run `gcloud auth application-default login`. Also, ensure the Vertex AI API is enabled for your project in the Google Cloud Console.
 
 ## Disclaimer
 

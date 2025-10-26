@@ -1,9 +1,9 @@
 {
   "state": {
     "user_profile" : {
-      "passport_nationality" : "US Citizen",
+      "passport_nationality" : "German Citizen",
       "seat_preference": "window",
-      "food_preference": "vegan",
+      "food_preference": "low-calorie meal",
       "allergies": [],
       "likes": [],
       "dislikes": [],
@@ -11,8 +11,8 @@
       "home":
       {
           "event_type": "home",
-          "address": "6420 Sequence Dr #400, San Diego, CA 92121, United States",
-          "local_prefer_mode": "drive"
+          "address": "Frauenstrasse 12, 80331 Munich",
+          "local_prefer_mode": "public transport"
       }    
     },
     "itinerary": {},
