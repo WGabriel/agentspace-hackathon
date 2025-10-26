@@ -51,16 +51,17 @@ Now that the agent is running, let's take a peek under the hood to see how it wo
 
 ---
 
-## Lab 4.3: Modifying an Agent
+## Lab 4.3: Integrating a New Tool
 
-Let's make our first change! A simple modification to the prompt can give the agent a completely new personality.
+The `planning_agent` currently uses mock data. Let's give it the ability to search the internet.
 
-*   **Goal:** Make a simple code change and observe its effect on the agent's behavior.
-*   **Task:** Let's give the `inspiration_agent` a fun personality.
-    1.  Open `travel_concierge/sub_agents/inspiration/prompt.py`.
-    2.  At the beginning of the `INSTRUCTIONS` string, add the following sentence: **"You are a friendly, enthusiastic travel guide who loves adventure."**
-    3.  Stop the `adk web` server in your terminal (with `Ctrl+C`) and restart it: `uv run adk web`.
-    4.  Chat with the agent again and ask for inspiration. Do you notice a difference in its tone?
+*   **Goal:** Enhance an agent's capabilities by giving it access to real-time information from the internet.
+*   **Task:** We'll integrate the `GoogleSearchGrounding` tool with the `planning_agent`.
+    1.  Open `travel_concierge/sub_agents/planning/agent.py`.
+    2.  Import the `GoogleSearchGrounding` tool by adding this line at the top of the file: `from travel_concierge.tools.search import google_search_grounding`.
+    3.  Add `google_search_grounding` to the list of tools passed to the `PlanningAgent`.
+    4.  Restart the agent (`Ctrl+C` and `uv run adk web`).
+    5.  After you ask for destination ideas, ask the planning agent a question that requires web access, for example: *"What is the weather like in Paris in the spring?"*
 
 ---
 
