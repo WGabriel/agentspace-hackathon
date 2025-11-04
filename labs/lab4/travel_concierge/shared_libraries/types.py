@@ -50,6 +50,8 @@ class Hotel(BaseModel):
     check_out_time: str = Field(description="Time in HH:MM format, e.g. 15:30")
     thumbnail: str = Field(description="Hotel logo location")
     price: int = Field(description="Price of the room per night")
+    amenities: Optional[list[str]] = Field(description="Hotel facilities and amenitites")
+    reviews: Optional[str] = Field(description="Hotel reviews")
 
 
 class HotelsSelection(BaseModel):

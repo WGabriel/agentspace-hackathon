@@ -20,6 +20,7 @@ from google.genai.types import GenerateContentConfig
 from travel_concierge.shared_libraries import types
 from travel_concierge.sub_agents.planning import prompt
 from travel_concierge.tools.memory import memorize
+from travel_concierge.tools.search import google_search_grounding
 
 
 itinerary_agent = Agent(
@@ -52,8 +53,9 @@ hotel_search_agent = Agent(
     name="hotel_search_agent",
     description="Help users find hotel around a specific geographic area",
     instruction=prompt.HOTEL_SEARCH_INSTR,
-    disallow_transfer_to_parent=True,
-    disallow_transfer_to_peers=True,
+    tools=[google_search_grounding],
+    disallow_transfer_to_parent=False,
+    disallow_transfer_to_peers=False,
     output_schema=types.HotelsSelection,
     output_key="hotel",
     generate_content_config=types.json_response_config,
