@@ -51,40 +51,46 @@ Now that the agent is running, let's take a peek under the hood to see how it wo
 
 ---
 
-## Lab 4.3: Modifying an Agent
+## Lab 4.3: Integrating a New Tool
 
-Let's make our first change! A simple modification to the prompt can give the agent a completely new personality.
+The `planning_agent` currently uses mock data. Let's give it the ability to search the internet.
 
-*   **Goal:** Make a simple code change and observe its effect on the agent's behavior.
-*   **Task:** Let's give the `inspiration_agent` a fun personality.
-    1.  Open `travel_concierge/sub_agents/inspiration/prompt.py`.
-    2.  At the beginning of the `INSTRUCTIONS` string, add the following sentence: **"You are a friendly, enthusiastic travel guide who loves adventure."**
-    3.  Stop the `adk web` server in your terminal (with `Ctrl+C`) and restart it: `uv run adk web`.
-    4.  Chat with the agent again and ask for inspiration. Do you notice a difference in its tone?
+*   **Goal:** Enhance an agent's capabilities by giving it access to real-time information from the internet.
+*   **Task:** We'll integrate the `GoogleSearchGrounding` tool with the `planning_agent`.
+    1.  Open `travel_concierge/sub_agents/planning/agent.py`.
+    2.  Import the `GoogleSearchGrounding` tool by adding this line at the top of the file: `from travel_concierge.tools.search import google_search_grounding`.
+    3.  Add `google_search_grounding` to the list of tools passed to the `PlanningAgent`.
+    4.  Restart the agent (`Ctrl+C` and `uv run adk web`).
+    5.  After you ask for destination ideas, ask the planning agent a question that requires web access, for example: *"What is the weather like in Paris in the spring?"*
 
 ---
 
-## Lab 4.4 (Bonus): Adding a New Tool
+## Lab 4.4: Integrating an MCP Tool
 
-*This is an advanced, optional lab for those who finish early.*
+In this lab, we'll add a new MCP tool for searching Airbnb listings. MCP servers are useful because they allow agents to interact with external APIs and services in a standardized way.
 
-*   **Goal:** Understand how to extend an agent's capabilities by giving it a new tool.
-*   **Task:** We'll create a simple new tool that tells you the current time.
-    1.  Create a new file: `travel_concierge/tools/time.py`.
-    2.  Add the following code to `time.py`:
-        ```python
-        import datetime
-        from adk.tools import tool
-
-        @tool
-        def get_current_time() -> str:
-            """Returns the current time."""
-            return datetime.datetime.now().strftime("%H:%M:%S")
+*   **Goal:** Integrate a new tool to search for real B&B listings.
+*   **Task:** We will use the OpenBNB MCP server. All the code is already in the 
+              `lab4/agent-enhancemements-knowledge` branch. 
+    1. First, checkout the branch and install the new dependencies:
+        ```bash
+              git checkout lab4/agent-enhancemements-knowledge
+              uv sync
         ```
-    3.  Now, let's give this tool to the `in_trip_agent`. Open `travel_concierge/sub_agents/in_trip/agent.py`.
-    4.  Import your new tool at the top of the file: `from travel_concierge.tools.time import get_current_time`.
-    5.  Add `get_current_time` to the list of tools passed to the `InTripAgent`.
-    6.  Restart the agent and try asking it: *"What time is it?"*
+
+    2. Now we will integrate this new tool. The tool is integrated in the following way:
+      ```python
+      airbnb_toolset = McpToolset(
+          connection_params=StdioServerParameters(
+              command='npx',
+              args=["-y",
+                    "@openbnb/mcp-server-airbnb",
+                    os.path.abspath(TARGET_FOLDER_PATH),
+                    "--ignore-robots-txt",
+                  ],
+          )
+      )
+      ```
 
 ---
 ## Overview
@@ -94,21 +100,6 @@ A traveler's experience can be divided into two stages: pre-booking and post-boo
 During the pre-booking stage, different agents are constructed to help the traveler with vacation inspirations, activities planning, finding flights and hotels, and helps with booking payment processing. The pre-booking stage ends with an itinerary for a trip.
 
 In the post-booking stage, given a concrete itinerary, a different set of agents support the traveler's needs before, during and after the trip. For example, the pre-trip agent checks for visa and medical requirements, travel advisory, and storm status. The in-trip agent monitors for any changes to bookings, with a day-of agent that helps the traveler getting from A to B during the trip. The post-trip agent helps collect feedback and identify additional preferences for future travel plans.
-
-## Agent Details
-
-The key features of the Travel Concierge include:
-
-
-| Feature               | Description               |
-| ----------------------- | --------------------------- |
-| **Interaction Type:** | Conversational            |
-| **Complexity:**       | Advanced                  |
-| **Agent Type:**       | Multi Agent               |
-| **Components:**       | Tools, AgentTools, Memory |
-| **Vertical:**         | Travel                    |
-
-See section [MCP](#mcp) for an example using Airbnb's MCP search tool.
 
 ### Agent Architecture
 
@@ -485,7 +476,7 @@ The following are just the starting ideas:
 *   **Issue:** `gcloud` authentication errors.
     *   **Solution:** Make sure you have the Google Cloud SDK installed and have successfully run `gcloud auth application-default login`. Also, ensure the Vertex AI API is enabled for your project in the Google Cloud Console.
 
-## Disclaimer
+Cha## Disclaimer
 
 This agent sample is provided for illustrative purposes only and is not intended for production use. It serves as a basic example of an agent and a foundational starting point for individuals or teams to develop their own agents.
 

@@ -6,7 +6,9 @@ if ! command -v uv &> /dev/null
 then
     echo "🐍 'uv' is not installed. Installing it now..."
     curl -LsSf https://astral.sh/uv/install.sh | sh
+    
     # Add uv to the path for the current session
+    source "$HOME/.cargo/env"
     export PATH="$HOME/.local/bin:$PATH"
     echo "✅ 'uv' has been installed."
 fi
