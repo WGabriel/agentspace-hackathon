@@ -58,7 +58,7 @@ env/
 
 
 # Editors
-.vscode/        # VS Code
+# .vscode/        # VS Code (Uncomment if you don't want to include .vscode folder)
 .idea/          # JetBrains IDEs (PyCharm, IntelliJ)
 *.sublime-project
 *.sublime-workspace
