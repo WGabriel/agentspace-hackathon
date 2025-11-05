@@ -24,19 +24,24 @@ This first lab is all about getting the agent running on your machine.
     *   `GOOGLE_PLACES_API_KEY`: Your API Key for the Google Maps Platform Places API. [Click here for instructions on how to get one](https://developers.google.com/maps/documentation/places/web-service/get-api-key).
 
 3.  **Authenticate with Google Cloud:**
-    This command allows the application to use your Google Cloud credentials.
+    This command allows the application to use your Google Cloud credentials. (not required if you are running in Cloud Shell Editor.)
     ```bash
     gcloud auth application-default login
     ```
 
 4.  **Run the Agent!**
-    You're all set. Start the agent's web interface with this command:
+    You're all set. You can just activate the Python environment created by ***uv*** and run the agent.
     ```bash
+    source .venv/bin/activate
     uv run adk web
     ```
     Now, open your browser to [http://127.0.0.1:8000](http://127.0.0.1:8000). Select `travel_concierge` from the dropdown menu, and you can start chatting with your agent!
+    **💡 Tip:** If you are running the Cloud Shell Editor, you can simply open the agent in the **Web Preview** tab. It defaults to port 8000, so you don't have to do anything.
 
-    **✅ Goal:** Successfully interact with the agent.
+    ![Cloud Shell Editor - Web Preview](./assets/web-preview-cloudshell.png)
+
+
+    **✅ Goal:** Successfully interact with the agent.  
     **💡 Things to Try:** Ask the agent: *"Need some destination ideas for the Americas."*
 
 ---
@@ -51,9 +56,13 @@ Now that the agent is running, let's take a peek under the hood to see how it wo
 
 ---
 
-## Lab 4.3: Integrating a New Tool
+## Lab 4.3: Integrating a New Tool: Search
 
-The `planning_agent` currently uses mock data. Let's give it the ability to search the internet.
+As you interact with the agent, you'll notice a significant limitation: it's making things up! 😲 The LLM generates details for hotels and flights without consulting real-world data.
+
+This means if a user asks for more information about a hotel from the `Hotel Search Agent`, the response won't be grounded in reality. That's not very helpful!
+
+Let's fix this by giving our agent a superpower: **the power of Google Search!** 🦸‍♀️
 
 *   **Goal:** Enhance an agent's capabilities by giving it access to real-time information from the internet.
 *   **Task:** We'll integrate the `GoogleSearchGrounding` tool with the `planning_agent`.
@@ -61,7 +70,7 @@ The `planning_agent` currently uses mock data. Let's give it the ability to sear
     2.  Import the `GoogleSearchGrounding` tool by adding this line at the top of the file: `from travel_concierge.tools.search import google_search_grounding`.
     3.  Add `google_search_grounding` to the list of tools passed to the `PlanningAgent`.
     4.  Restart the agent (`Ctrl+C` and `uv run adk web`).
-    5.  After you ask for destination ideas, ask the planning agent a question that requires web access, for example: *"What is the weather like in Paris in the spring?"*
+    5.  After you ask for destination ideas, ask the planning agent a question that requires web access, for example: *"What restaurants does the Oberoi Udaivilas Hotel in Udaipur have?"*
 
 ---
 
@@ -93,52 +102,6 @@ In this lab, we'll add a new MCP tool for searching Airbnb listings. MCP servers
       ```
 
 ---
-## Overview
-
-A traveler's experience can be divided into two stages: pre-booking and post-booking. In this example, each stage involves the use of multiple specialized agents working together to provide the concierge experience.
-
-During the pre-booking stage, different agents are constructed to help the traveler with vacation inspirations, activities planning, finding flights and hotels, and helps with booking payment processing. The pre-booking stage ends with an itinerary for a trip.
-
-In the post-booking stage, given a concrete itinerary, a different set of agents support the traveler's needs before, during and after the trip. For example, the pre-trip agent checks for visa and medical requirements, travel advisory, and storm status. The in-trip agent monitors for any changes to bookings, with a day-of agent that helps the traveler getting from A to B during the trip. The post-trip agent helps collect feedback and identify additional preferences for future travel plans.
-
-### Agent Architecture
-
-Travel Concierge Agents Architecture
-
-<img src="travel-concierge-arch.png" alt="Travel Concierge's Multi-Agent Architecture" width="800"/>
-
-### Component Details
-
-Expand on the "Key Components" from above.
-
-* **Agents:**
-  * `inspiration_agent` - Interacts with the user to make suggestions on destinations and activities, inspire the user to choose one.
-  * `planning_agent` - Given a destination, start date, and duration, the planning agent helps the user select flights, seats and a hotel (mocked), then generate an itinerary containing the activities.
-  * `booking_agent` - Given an itinerary, the booking agent will help process those items in the itinerary that requires payment.
-  * `pre_trip_agent` - Intended to be invoked regularly before the trip starts; This agent fetches relevant trip information given its origin, destination, and the user's nationality.
-  * `in_trip_agent`- Intended to be invoked frequently during the trip. This agent provide three services: monitor any changes in bookings (mocked), acts as an informative guide, and provides transit assistance.
-  * `post_trip_agent` - In this example, the post trip agent asks the traveler about their experience and attempts to extract and store their various preferences based on the trip, so that the information could be useful in future interactions.
-* **Tools:**
-  * `map_tool` - retrieves lat/long; geocoding an address with the Google Map API.
-  * `memorize` - a function to memorize information from the dialog that are important to trip planning and to provide in-trip support.
-* **AgentTools:**
-  * `google_search_grounding` - used in the example for pre-trip information gather such as visa, medical, travel advisory...etc.
-  * `what_to_pack` - suggests what to pack for the trip given the origin and destination.
-  * `place_agent` - this recommends destinations.
-  * `poi_agent` - this suggests activities given a destination.
-  * `itinerary_agent` - called by the `planning_agent` to fully construct and represent an itinerary in JSON following a pydantic schema.
-  * `day_of_agent` - called by the `in_trip_agent` to provide in_trip on the day and in the moment transit information, getting from A to B. Implemented using dynamic instructions.
-  * `flight_search_agent` -  mocked flight search given origin, destination, outbound and return dates.
-  * `flight_seat_selection_agent` -  mocked seat selection, some seats are not available.
-  * `hotel_search_agent` - mocked hotel selection given destination, outbound and return dates.
-  * `hotel_room_selection_agent` - mocked hotel room selection.
-  * `confirm_reservation_agent` - mocked reservation.
-  * `payment_choice` - mocked payment selection, Apple Pay will not succeed, Google Pay and Credit Card will.
-  * `payment_agent` - mocked payment processing.
-* **Memory:**
-  * All agents and tools in this example use the Agent Development Kit's internal session state as memory.
-  * The session state is used to store information such as the itinerary, and temporary AgentTools' responses.
-  * There are a number of premade itineraries that can be loaded for test runs. See 'Running the Agent' below on how to run them.
 
 ### Sample Agent interaction
 
@@ -170,12 +133,6 @@ To run the unit tests, just checking all agents and tools responds:
 
 ```bash
 uv run pytest tests
-```
-
-To run agent trajectory tests:
-
-```bash
-uv run pytest eval
 ```
 
 ## Deploying the Agent
@@ -228,7 +185,7 @@ agent-starter-pack create my-travel-concierge -a adk@travel-concierge
 If you have [`uv`](https://github.com/astral-sh/uv) installed, you can create and set up your project with a single command:
 
 ```bash
-uvx agent-starter-pack create my-travel-concierge -a adk@travel-concierge
+1uvx agent-starter-pack create my-travel-concierge -a adk@travel-concierge
 ```
 
 This command handles creating the project without needing to pre-install the package into a virtual environment.
