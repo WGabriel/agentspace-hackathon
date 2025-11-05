@@ -165,8 +165,46 @@ Now, confirm your credentials and watch the magic happen! ✨
 At the end, the process will have deployed our app to Agent Engine, which is the starting point for integrating it with Gemini Enterprise. 
 The output will also give us an ID of a *Reasoning Engine* Resource. Keep note of it as we will need it later.
 
-### Step 2: Deploy to Gemini Enterprise
+### 🚀 Step 2: Deploy to Gemini Enterprise 🚀
 
+Before we launch our agent into the world, let's do a little housekeeping. 🧹
+
+#### ✅ Pre-flight Checklist:
+
+1.  **Enable the Discovery Engine API:**
+    *   Head over to the [Discovery Engine API page](https://console.cloud.google.com/apis/api/discoveryengine.googleapis.com/metrics?_gl=1*1hdazko*_ga*MTU4Mzk0OTM2Ni4xNzYyMzQ5MDE0*_ga_4LYFWVHBEB*czE3NjIzNTg0MzAkbzIkZzAkdDE3NjIzNTg0MzAkajYwJGwwJGgw) in the Google Cloud console.
+    *   Make sure you've enabled it for your project. ✅
+
+2.  **Grant Permissions:**
+    *   Enable the **Vertex AI User** and **Vertex AI Viewer** roles for both your Discovery Engine service account and your GCP account. This is super important so Gemini Enterprise can talk to your agent! 🗣️
+    *   > **💡 Tip:** To find your Discovery Engine service account, go to the IAM page and check the "Include Google-provided role grants" box.
+    *   Go to the IAM page and search for "Discovery Engine". Add the necessary permissions to your service account. 🔐
+
+#### 🚀 Launch Sequence:
+
+Now, let's get our deployment script ready!
+
+```bash
+# Navigate to the right directory
+cd agent_registration_tool
+
+# Open register_agent.sh or register_agent.http
+# Fill in your Gemini Enterprise App ID and Reasoning Engine App ID.
+
+# Make the script executable
+chmod +x register_agent.sh
+
+# Run the script!
+./register_agent.sh
+```
+
+Once the script finishes, head over to Gemini Enterprise. You'll see your shiny new agent in the **Agents** tab! 🎉
+
+![Gemini Enterprise with custom ADK Agent Connected](./assets/custom_adk_agent.png)
+
+Click on **Travel Concierge** and start chatting with your creation! 🤖💬
+
+![Travel Concierge Chat in Gemini Enterprise](./assets/concierge_in_gemini_enterprise.png)
 
 
 ### Refining Agents
@@ -185,6 +223,7 @@ The following are just the starting ideas:
 
 *   **Issue:** Agent returns a "Malformed function call" or a Pydantic error.
     *   **Solution:** This can happen if the AI model's response isn't perfectly structured. The agent can often fix this itself. Just reply with **"try again"**.
+    *   In case you want to change the structure of your answers, you can also do that by changing the definition of the Pydantic classes.
 
 *   **Issue:** `gcloud` authentication errors.
     *   **Solution:** Make sure you have the Google Cloud SDK installed and have successfully run `gcloud auth application-default login`. Also, ensure the Vertex AI API is enabled for your project in the Google Cloud Console
