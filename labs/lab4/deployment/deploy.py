@@ -111,7 +111,8 @@ def main(argv: list[str]) -> None:
     project_id = (
         FLAGS.project_id if FLAGS.project_id else os.getenv("GOOGLE_CLOUD_PROJECT")
     )
-    location = FLAGS.location if FLAGS.location else os.getenv("GOOGLE_CLOUD_LOCATION")
+    location = "us-central1"
+    # location = FLAGS.location if FLAGS.location else os.getenv("GOOGLE_CLOUD_LOCATION")
     bucket = FLAGS.bucket if FLAGS.bucket else os.getenv("GOOGLE_CLOUD_STORAGE_BUCKET")
     # Variables for Travel Concierge from .env
     initial_states_path = (
