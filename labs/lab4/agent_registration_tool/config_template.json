@@ -1,0 +1,18 @@
+ {
+    "project_id": "Your GCP Project ID",
+    "location": "us-central1",    
+    "re_resource_name": "projects/your-gcp-project-id/locations/us-central1/agents/your-deployed-agent-engine-id",
+    "re_resource_id": "your-deployed-agent-engine-id",
+    "re_display_name": "My Deployed Agent Engine Name",
+    "app_id": "",
+    "agent_id": "registered-agent-id-from-agentspace",
+    "ars_display_name": "My Registered Agent Name",
+    "description": "Agent Description for Registry",
+    "tool_description": "Tool Description for Registry",
+    "adk_deployment_id": "Your Agent Engine Deployment ID",
+    "auth_id": "your-oauth-auth-id-if-any",
+    "icon_uri": "https://example.com/icon.png",
+    "api_location": "global",
+    "re_location": "global"
+
+ }
