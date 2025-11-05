@@ -24,19 +24,24 @@ This first lab is all about getting the agent running on your machine.
     *   `GOOGLE_PLACES_API_KEY`: Your API Key for the Google Maps Platform Places API. [Click here for instructions on how to get one](https://developers.google.com/maps/documentation/places/web-service/get-api-key).
 
 3.  **Authenticate with Google Cloud:**
-    This command allows the application to use your Google Cloud credentials.
+    This command allows the application to use your Google Cloud credentials. (not required if you are running in Cloud Shell Editor.)
     ```bash
     gcloud auth application-default login
     ```
 
 4.  **Run the Agent!**
-    You're all set. Start the agent's web interface with this command:
+    You're all set. You can just activate the Python environment created by ***uv*** and run the agent.
     ```bash
+    source .venv/bin/activate
     uv run adk web
     ```
     Now, open your browser to [http://127.0.0.1:8000](http://127.0.0.1:8000). Select `travel_concierge` from the dropdown menu, and you can start chatting with your agent!
+    **💡 Tip:** If you are running the Cloud Shell Editor, you can simply open the agent in the **Web Preview** tab. It defaults to port 8000, so you don't have to do anything.
 
-    **✅ Goal:** Successfully interact with the agent.
+    ![Cloud Shell Editor - Web Preview](./assets/web-preview-cloudshell.png)
+
+
+    **✅ Goal:** Successfully interact with the agent.  
     **💡 Things to Try:** Ask the agent: *"Need some destination ideas for the Americas."*
 
 ---
@@ -47,13 +52,22 @@ Now that the agent is running, let's take a peek under the hood to see how it wo
 
 *   **Goal:** Learn to navigate the project structure and find key components.
 *   **Task:** The agent that handles initial inspiration is called the `inspiration_agent`. Your task is to find its core instructions, also known as its "prompt".
-*   **Hint:** Look inside the `travel_concierge/sub_agents/inspiration/` directory. The file you're looking for is `prompt.py`. Read through it to see how the agent is instructed to behave.
+*   **Hint:** Look inside the `travel_concierge/sub_agents/inspiration/` directory. The main files which define the behaviour of the agent are `prompt.py` and `agent.py`. 
+              Read through them to see how the agent is instructed to behave. Try to interact with the agent with your travel questions, and as you build up your conversation,
+              pay attention to:  
+              - **Sessions:** A Session is like a complete notebook for a single, continuous conversation.  
+              - **Events:** Events are all the individual messages and notes written sequentially in that notebook, forming a complete transcript.  
+              - **State:** State is a sticky note on the notebook's cover where you jot down the current important details so you don't have to re-read the entire notebook every time.  
 
 ---
 
-## Lab 4.3: Integrating a New Tool
+## Lab 4.3: Integrating a New Tool: Search
 
-The `planning_agent` currently uses mock data. Let's give it the ability to search the internet.
+As you interact with the agent, you'll notice a significant limitation: it's making things up! 😲 The LLM generates details for hotels and flights without consulting real-world data.
+
+This means if a user asks for more information about a hotel from the `Hotel Search Agent`, the response won't be grounded in reality. That's not very helpful!
+
+Let's fix this by giving our agent a superpower: **the power of Google Search!** 🦸‍♀️
 
 *   **Goal:** Enhance an agent's capabilities by giving it access to real-time information from the internet.
 *   **Task:** We'll integrate the `GoogleSearchGrounding` tool with the `planning_agent`.
@@ -61,7 +75,7 @@ The `planning_agent` currently uses mock data. Let's give it the ability to sear
     2.  Import the `GoogleSearchGrounding` tool by adding this line at the top of the file: `from travel_concierge.tools.search import google_search_grounding`.
     3.  Add `google_search_grounding` to the list of tools passed to the `PlanningAgent`.
     4.  Restart the agent (`Ctrl+C` and `uv run adk web`).
-    5.  After you ask for destination ideas, ask the planning agent a question that requires web access, for example: *"What is the weather like in Paris in the spring?"*
+    5.  After you ask for destination ideas, ask the planning agent a question that requires web access, for example: *"What restaurants does the Oberoi Udaivilas Hotel in Udaipur have?"*
 
 ---
 
@@ -93,52 +107,6 @@ In this lab, we'll add a new MCP tool for searching Airbnb listings. MCP servers
       ```
 
 ---
-## Overview
-
-A traveler's experience can be divided into two stages: pre-booking and post-booking. In this example, each stage involves the use of multiple specialized agents working together to provide the concierge experience.
-
-During the pre-booking stage, different agents are constructed to help the traveler with vacation inspirations, activities planning, finding flights and hotels, and helps with booking payment processing. The pre-booking stage ends with an itinerary for a trip.
-
-In the post-booking stage, given a concrete itinerary, a different set of agents support the traveler's needs before, during and after the trip. For example, the pre-trip agent checks for visa and medical requirements, travel advisory, and storm status. The in-trip agent monitors for any changes to bookings, with a day-of agent that helps the traveler getting from A to B during the trip. The post-trip agent helps collect feedback and identify additional preferences for future travel plans.
-
-### Agent Architecture
-
-Travel Concierge Agents Architecture
-
-<img src="travel-concierge-arch.png" alt="Travel Concierge's Multi-Agent Architecture" width="800"/>
-
-### Component Details
-
-Expand on the "Key Components" from above.
-
-* **Agents:**
-  * `inspiration_agent` - Interacts with the user to make suggestions on destinations and activities, inspire the user to choose one.
-  * `planning_agent` - Given a destination, start date, and duration, the planning agent helps the user select flights, seats and a hotel (mocked), then generate an itinerary containing the activities.
-  * `booking_agent` - Given an itinerary, the booking agent will help process those items in the itinerary that requires payment.
-  * `pre_trip_agent` - Intended to be invoked regularly before the trip starts; This agent fetches relevant trip information given its origin, destination, and the user's nationality.
-  * `in_trip_agent`- Intended to be invoked frequently during the trip. This agent provide three services: monitor any changes in bookings (mocked), acts as an informative guide, and provides transit assistance.
-  * `post_trip_agent` - In this example, the post trip agent asks the traveler about their experience and attempts to extract and store their various preferences based on the trip, so that the information could be useful in future interactions.
-* **Tools:**
-  * `map_tool` - retrieves lat/long; geocoding an address with the Google Map API.
-  * `memorize` - a function to memorize information from the dialog that are important to trip planning and to provide in-trip support.
-* **AgentTools:**
-  * `google_search_grounding` - used in the example for pre-trip information gather such as visa, medical, travel advisory...etc.
-  * `what_to_pack` - suggests what to pack for the trip given the origin and destination.
-  * `place_agent` - this recommends destinations.
-  * `poi_agent` - this suggests activities given a destination.
-  * `itinerary_agent` - called by the `planning_agent` to fully construct and represent an itinerary in JSON following a pydantic schema.
-  * `day_of_agent` - called by the `in_trip_agent` to provide in_trip on the day and in the moment transit information, getting from A to B. Implemented using dynamic instructions.
-  * `flight_search_agent` -  mocked flight search given origin, destination, outbound and return dates.
-  * `flight_seat_selection_agent` -  mocked seat selection, some seats are not available.
-  * `hotel_search_agent` - mocked hotel selection given destination, outbound and return dates.
-  * `hotel_room_selection_agent` - mocked hotel room selection.
-  * `confirm_reservation_agent` - mocked reservation.
-  * `payment_choice` - mocked payment selection, Apple Pay will not succeed, Google Pay and Credit Card will.
-  * `payment_agent` - mocked payment processing.
-* **Memory:**
-  * All agents and tools in this example use the Agent Development Kit's internal session state as memory.
-  * The session state is used to store information such as the itinerary, and temporary AgentTools' responses.
-  * There are a number of premade itineraries that can be loaded for test runs. See 'Running the Agent' below on how to run them.
 
 ### Sample Agent interaction
 
@@ -155,306 +123,89 @@ Instead of interacting with the concierge one turn at time. Try giving it the en
 
 Without specifically optimizing for such usage, this cohort of agents seem to be able to operate by themselves on your behalf with very little input.
 
-## Running Tests
 
-To run the illustrative tests and evaluations, install the extra dependencies and run `pytest`:
+## 🚀 Deploying the Agent 🚀
 
-```bash
-uv sync --dev
-uv run pytest
-```
+### Step 1: Deploying to Agent Engine
 
-The different tests can also be run separately:
+> **⚡️ Pro Tip: ⚡️**
+>
+> The [Agent Starter Pack](https://goo.gle/agent-starter-pack) can create a production-ready version of this agent for you! It handles the full end-to-end deployment and adds other cool features.
 
-To run the unit tests, just checking all agents and tools responds:
+Ready to deploy? Let's go!
 
 ```bash
-uv run pytest tests
-```
-
-To run agent trajectory tests:
-
-```bash
-uv run pytest eval
-```
-
-## Deploying the Agent
-
-To deploy the agent to Vertex AI Agent Engine, run the following command under `travel-concierge`:
-
-```bash
-uv sync --group deployment
-uv run python deployment/deploy.py --create
-```
-
-When this command returns, if it succeeds it will print an AgentEngine resource
-id that looks something like this:
-
-```
-projects/************/locations/us-central1/reasoningEngines/7737333693403889664
-```
-
-To quickly test that the agent has successfully deployed,
-run the following command for one turn with the agent "Looking for inspirations around the Americas":
-
-```bash
-uv run python deployment/deploy.py --quicktest --resource_id=<RESOURCE_ID>
-```
-
-This will return a stream of JSON payload indicating the deployed agent is functional.
-
-To delete the agent, run the following command (using the resource ID returned previously):
-
-```bash
-uv run python deployment/deploy.py --delete --resource_id=<RESOURCE_ID>
-```
-
-### Alternative: Using Agent Starter Pack
-
-You can also use the [Agent Starter Pack](https://goo.gle/agent-starter-pack) to create a production-ready version of this agent with additional deployment options:
-
-```bash
-# Create and activate a virtual environment
-python -m venv .venv && source .venv/bin/activate # On Windows: .venv\Scripts\activate
+# Make sure that the virtual environment created by uv is still active
+source .venv/bin/activate # On Windows: .venv\Scripts\activate
 
 # Install the starter pack and create your project
-pip install --upgrade agent-starter-pack
-agent-starter-pack create my-travel-concierge -a adk@travel-concierge
+uv pip install --upgrade agent-starter-pack
+
+# Make sure you are in the right folder
+cd travel_concierge
+
+# The `enhance` function of the agent-starter-pack adds deployment resources to your repository
+uvx agent-starter-pack enhance
+
+# Now we are ready to deploy
+make deploy
 ```
 
-<details>
-<summary>⚡️ Alternative: Using uv</summary>
+You'll be asked a few questions. Here's a cheat sheet:
 
-If you have [`uv`](https://github.com/astral-sh/uv) installed, you can create and set up your project with a single command:
+*   **Continue with enhancement?** `Y` 👍
+*   **Select base template:** `adk_base` 뼈
+*   **Select agent directory:** `travel_concierge` ✈️
+*   **Deployment target choice:** `1` 🎯
+*   **CI/CD runner choice:** `1` 🏃‍♀️
+*   **Desired GCP region:** `us-central1` (or your preferred region) 🌎
+
+Now, confirm your credentials and watch the magic happen! ✨
+
+At the end, the process will have deployed our app to Agent Engine, which is the starting point for integrating it with Gemini Enterprise. 
+The output will also give us an ID of a *Reasoning Engine* Resource. Keep note of it as we will need it later.
+
+### 🚀 Step 2: Deploy to Gemini Enterprise 🚀
+
+Before we launch our agent into the world, let's do a little housekeeping. 🧹
+
+#### ✅ Pre-flight Checklist:
+
+1.  **Enable the Discovery Engine API:**
+    *   Head over to the [Discovery Engine API page](https://console.cloud.google.com/apis/api/discoveryengine.googleapis.com/metrics?_gl=1*1hdazko*_ga*MTU4Mzk0OTM2Ni4xNzYyMzQ5MDE0*_ga_4LYFWVHBEB*czE3NjIzNTg0MzAkbzIkZzAkdDE3NjIzNTg0MzAkajYwJGwwJGgw) in the Google Cloud console.
+    *   Make sure you've enabled it for your project. ✅
+
+2.  **Grant Permissions:**
+    *   Enable the **Vertex AI User** and **Vertex AI Viewer** roles for both your Discovery Engine service account and your GCP account. This is super important so Gemini Enterprise can talk to your agent! 🗣️
+    *   > **💡 Tip:** To find your Discovery Engine service account, go to the IAM page and check the "Include Google-provided role grants" box.
+    *   Go to the IAM page and search for "Discovery Engine". Add the necessary permissions to your service account. 🔐
+
+#### 🚀 Launch Sequence:
+
+Now, let's get our deployment script ready!
 
 ```bash
-uvx agent-starter-pack create my-travel-concierge -a adk@travel-concierge
+# Navigate to the right directory
+cd agent_registration_tool
+
+# Open register_agent.sh or register_agent.http
+# Fill in your Gemini Enterprise App ID and Reasoning Engine App ID.
+
+# Make the script executable
+chmod +x register_agent.sh
+
+# Run the script!
+./register_agent.sh
 ```
 
-This command handles creating the project without needing to pre-install the package into a virtual environment.
+Once the script finishes, head over to Gemini Enterprise. You'll see your shiny new agent in the **Agents** tab! 🎉
 
-</details>
+![Gemini Enterprise with custom ADK Agent Connected](./assets/custom_adk_agent.png)
 
-The starter pack will prompt you to select deployment options and provides additional production-ready features including automated CI/CD deployment scripts.
+Click on **Travel Concierge** and start chatting with your creation! 🤖💬
 
-## Application Development
+![Travel Concierge Chat in Gemini Enterprise](./assets/concierge_in_gemini_enterprise.png)
 
-### Callbacks and initial State
-
-The `root_agent` in this demo currently has a `before_agent_callback` registered to load an initial state, such as user preferences and itinerary, from a file into the session state for interaction. The primary reason for this is to reduce the amount of set up necessary, and this makes it easy to use the ADK UIs.
-
-In a realistic application scenario, initial states can be included when a new `Session` is being created, there by satisfying use cases where user preferences and other pieces of information are most likely loaded from external databases.
-
-### Memory vs States
-
-In this example, we are using the session states as memory for the concierge, to store the itinerary, and intermediate agent / tools / user preference responses. In a realistic application scenario, the source for user profiles should be an external database, and the
-reciprocal writes to session states from tools should in addition be persisted, as a write-through, to external databases dedicated for user profiles and itineraries.
-
-### MCP
-
-An example using Airbnb's MCP server is included. ADK supports MCP and provides several MCP tools.
-This example attaches the Airbnb search and listing MCP tools to the `planning_agent`, and ask the concierge to simply find an airbnb given certain dates. The concierge will transfer the request to the planning agent which in turn will call the Airbnb search MCP tool.
-
-To try the example, first set up nodejs and npx from Node.js [website](https://nodejs.org/en/download)
-
-Making sure:
-
-```
-$ which node
-/Users/USERNAME/.nvm/versions/node/v22.14.0/bin/node
-
-$ which npx
-/Users/USERNAME/.nvm/versions/node/v22.14.0/bin/npx
-```
-
-Then, under the `travel-concierge/` directory, run the test with:
-
-```
-python -m tests.mcp_abnb
-```
-
-You will see outputs on the console similar to the following:
-
-```
-[user]: Find me an airbnb in San Diego, April 9th, to april 13th, no flights nor itinerary needed. No need to confirm, simply return 5 choicess, remember to include urls.
-
-( Setting up the agent and the tool ) 
-
-Server started with options: ignore-robots-txt
-Airbnb MCP Server running on stdio
-
-Inserting Airbnb MCP tools into Travel-Concierge...
-...
-FOUND planning_agent
-
-( Execute: Runner.run_async() ) 
-
-[root_agent]: transfer_to_agent( {"agent_name": "planning_agent"} )
-...
-[planning_agent]: airbnb_search( {"checkout": "2025-04-13", "location": "San Diego", "checkin": "2025-04-09"} )
-
-[planning_agent]: airbnb_search responds -> {
-  "searchUrl": "https://www.airbnb.com/s/San%20Diego/homes?checkin=2025-04-09&checkout=2025-04-13&adults=1&children=0&infants=0&pets=0",
-  "searchResults": [
-    {
-      "url": "https://www.airbnb.com/rooms/24669593",
-      "listing": {
-        "id": "24669593",
-        "title": "Room in San Diego",
-        "coordinate": {
-          "latitude": 32.82952,
-          "longitude": -117.22201
-        },
-        "structuredContent": {
-          "mapCategoryInfo": "Stay with Stacy, Hosting for 7 years"
-        }
-      },
-      "avgRatingA11yLabel": "4.91 out of 5 average rating,  211 reviews",
-      "listingParamOverrides": {
-        "categoryTag": "Tag:8678",
-        "photoId": "1626723618",
-        "amenities": ""
-      },
-      "structuredDisplayPrice": {
-        "primaryLine": {
-          "accessibilityLabel": "$9,274 TWD for 4 nights"
-        },
-        "explanationData": {
-          "title": "Price details",
-          "priceDetails": "$2,319 TWD x 4 nights: $9,274 TWD"
-        }
-      }
-    },
-    ...
-    ...
-  ]
-}
-
-[planning_agent]: Here are 5 Airbnb options in San Diego for your trip from April 9th to April 13th, including the URLs:
-
-1.  Room in San Diego: [https://www.airbnb.com/rooms/24669593](https://www.airbnb.com/rooms/24669593)
-2.  Room in San Diego: [https://www.airbnb.com/rooms/5360158](https://www.airbnb.com/rooms/5360158)
-3.  Room in San Diego: [https://www.airbnb.com/rooms/1374944285472373029](https://www.airbnb.com/rooms/1374944285472373029)
-4.  Apartment in San Diego: [https://www.airbnb.com/rooms/808814447273523115](https://www.airbnb.com/rooms/808814447273523115)
-5.  Room in San Diego: [https://www.airbnb.com/rooms/53010806](https://www.airbnb.com/rooms/53010806)
-```
-
-### GUI
-
-A typical end-user will be interacting with agents via GUIs instead of pure text. The front-end concierge application will likely render several kinds of agent responses graphically and/or with rich media, for example:
-
-- Destination ideas as a carousel of cards,
-- Points of interest / Directions on a Map,
-- Expandable videos, images, link outs.
-- Selection of flights and hotels as lists with logos,
-- Selection of flight seats on a seating chart,
-- Clickable templated responses.
-
-Many of these can be achieved via ADK's Events. This is because:
-
-- All function calls and function responses are reported as events by the session runner.
-- In this travel-concierge example, several sub-agents and tools use an explicit pydantic schema and controlled generation to generate a JSON response. These agents are: place agent (for destinations), poi agent (for pois and activities), flights and hotels selection agents, seats and rooms selection agents, and itinerary.
-- When a session runner service is wrapped as a server endpoint, the series of events carrying these JSON payloads can be streamed over to the application.
-- When the application recognizes the payload schema by their source agent, it can therefore render the payload accordingly.
-
-To see how to work with events, agents and tools responses, open the file [`tests/programmatic_example.py`](tests/programmatic_example.py).
-
-Run the test client code with:
-
-```
-python tests/programmatic_example.py 
-```
-
-You will get outputs similar to this below:
-
-```
-[user]: "Inspire me about Maldives"
-
-...
-
-[root_agent]: transfer_to_agent( {"agent_name": "inspiration_agent"} )
-
-...
-
-[inspiration_agent]: place_agent responds -> {
-  "id": "af-be786618-b60b-45ee-a801-c40fd6811e60",
-  "name": "place_agent",
-  "response": {
-    "places": [
-      {
-        "name": "Malé",
-        "country": "Maldives",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Male%2C_Maldives_panorama_2016.jpg/1280px-Male%2C_Maldives_panorama_2016.jpg",
-        "highlights": "The vibrant capital city, offering bustling markets, historic mosques, and a glimpse into local Maldivian life.",
-        "rating": "4.2"
-      },
-      {
-        "name": "Baa Atoll",
-        "country": "Maldives",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Baa_Atoll_Maldives.jpg/1280px-Baa_Atoll_Maldives.jpg",
-        "highlights": "A UNESCO Biosphere Reserve, famed for its rich marine biodiversity, including manta rays and whale sharks, perfect for snorkeling and diving.",
-        "rating": "4.8"
-      },
-      {
-        "name": "Addu Atoll",
-        "country": "Maldives",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Addu_Atoll_Maldives.jpg/1280px-Addu_Atoll_Maldives.jpg",
-        "highlights": "The southernmost atoll, known for its unique equatorial vegetation, historic WWII sites, and excellent diving spots with diverse coral formations.",
-        "rating": "4.5"
-      }
-    ]
-  }
-}
-
-[app]: To render a carousel of destinations
-
-[inspiration_agent]: Maldives is an amazing destination! I see three great options:
-
-1.  **Malé:** The capital city, where you can experience local life, markets, and mosques.
-2.  **Baa Atoll:** A UNESCO Biosphere Reserve, perfect for snorkeling and diving, with manta rays and whale sharks.
-3.  **Addu Atoll:** The southernmost atoll, offering unique vegetation, WWII history, and diverse coral for diving.
-
-Are any of these destinations sound interesting? I can provide you with some activities you can do in the destination you selected.
-
-[user]: "Suggest some acitivities around Baa Atoll"
-
-...
-
-```
-
-In an environment where the events are passed from the server running the agents to an application front-end, the application can use the method in this example to parse and identify which payload is being sent and choose the most appropriate payload renderer / handler.
-
-## Customization
-
-The following are some ideas how one can reuse the concierge and make it your own.
-
-### Load a premade itinerary to demo the in-trip flow
-
-- By default, a user profile and an empty itinerary is loaded from `travel_concierge/profiles/itinerary_empty_default.json`.
-- To specify a different file to load, such as the Seattle example `travel_concierge/profiles/itinerary_seattle_example.json`:
-  - Set the environmental variable `TRAVEL_CONCIERGE_SCENARIO` to `travel_concierge/profiles/itinerary_seattle_example.json` in the `.env`.
-  - Then restart `adk web` and load the travel concierge.
-- When you start interacting with the agent, the state will be loaded.
-- You can see the loaded user profile and itinerary when you select "State" in the GUI.
-
-### Make your own premade itinerary for demos
-
-- The Itinerary schema is defined in types.py
-- Make a copy of `itinerary_seattle_example.json` and make your own `itinerary` following the schema.
-- Use the above steps to load and test your new itinerary.
-- For the `user_profile` dict:
-  - `passport_nationality` and `home` are mandatory fields, modify only the `address` and `local_prefer_mode`.
-  - You can modify / add additional profile fields to the
-
-### Integration with external APIs
-
-There are many opportunities for enhancements, customizations and integration in this example:
-
-- Connecting to real flights / seats selection systems
-- Connecting to real hotels / rooms selection systems
-- Usage of external memory persistence services, or databases, instead of the session's state
-- Use of the Google Maps [Route API](https://developers.google.com/maps/documentation/routes) in `day_of` agent.
-- Connect to external APIs for visa / medical / travel advisory and NOAA storm information instead of using Google Search Grounding.
 
 ### Refining Agents
 
@@ -472,11 +223,12 @@ The following are just the starting ideas:
 
 *   **Issue:** Agent returns a "Malformed function call" or a Pydantic error.
     *   **Solution:** This can happen if the AI model's response isn't perfectly structured. The agent can often fix this itself. Just reply with **"try again"**.
+    *   In case you want to change the structure of your answers, you can also do that by changing the definition of the Pydantic classes.
 
 *   **Issue:** `gcloud` authentication errors.
-    *   **Solution:** Make sure you have the Google Cloud SDK installed and have successfully run `gcloud auth application-default login`. Also, ensure the Vertex AI API is enabled for your project in the Google Cloud Console.
+    *   **Solution:** Make sure you have the Google Cloud SDK installed and have successfully run `gcloud auth application-default login`. Also, ensure the Vertex AI API is enabled for your project in the Google Cloud Console
 
-Cha## Disclaimer
+## Disclaimer
 
 This agent sample is provided for illustrative purposes only and is not intended for production use. It serves as a basic example of an agent and a foundational starting point for individuals or teams to develop their own agents.
 
