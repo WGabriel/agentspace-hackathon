@@ -22,6 +22,8 @@ This repository contains the agenda and resources for our session. Throughout th
 | 14:30-15:55 | [**Lab 4: Advanced Agents & Multi-agent Systems**](./labs/lab4/README.md) (Sanchit)         | - Deck:[Agent Design Patterns](./labs/lab4/agent-design-patterns.pdf)  <br />- Environment Setup and Running your first Multi-Agent Travel Concierge Bot  <br />- Lab 4.1: Adding the power of Google Search to your Agent  <br />- **Lab 4.2: Adding an external MCP server to serve real-time results**  <br />- Deploying your agent to Gemini Enterprise |
 | 15:55-16:00 | Call to fill out feedback form                                                                     | Your feedback is important to us! Feedback form: https://forms.gle/nAT4pWsbM34pAS3U7                                                                                                                                                                                                                                                                 |
 | 16:00-16:30 | **Group Exercise:** Brainstorming (Rares)                                                | - Recap of the labs<br />- How can you apply what you learned today in your company?  <br />- How can you apply this to your day-to-day tasks for personal productivity/efficiency gain?                                                                                                                                                             |
+| **💫 Bonus Activity 🎆** | Building Collaborative Multi-Agent Systems with A2A          | - If you are super fast and finish earlier then scheduled you can do [this bonus-lab](https://codelabs.developers.google.com/instavibe-adk-multi-agents/instructions#0) to get extra points 😉<br> - Learn and implement the Agent-to-Agent (A2A) communication protocol, establishing a standardized way for distributed agents (potentially running on different machines or services) to interact reliably.                                                                                                                                                                                                                                                                                           |
+
 
 ---
 
@@ -33,6 +35,6 @@ To conclude the day, you will form groups and brainstorm a practical application
 
 * Identify a use case within your company where agent technology could be applied.
 * Consider how this solution could**reduce expenses** or**increase revenue**.
-* Prepare a brief pitch. Consider creating a[one-slider](https://docs.google.com/presentation) outlining your idea with a few bullet points. Each group will select one person to present the idea to everyone.
+* Prepare a brief pitch. Consider creating a [one-slider](https://docs.google.com/presentation) outlining your idea with a few bullet points. Each group will select one person to present the idea to everyone.
 
 Happy building!
