@@ -19,6 +19,10 @@
 
  ![Chatting with Gemini Enterprise about your own data](image-1.png)
 
+ - If you like, ask Gemini to create a suiting image. What do you think about mine?
+ ![Imagen Output Hackathon](imagen_output_hackathon.png) 
+
+
 - If you have time left: Navigate to NotebookLM, upload a Document with an interesting topic of your choice, and [generate the audio output. ](https://support.google.com/notebooklm/answer/16212820?hl=en)
 ![NotebookLM](image-2.png)
 
