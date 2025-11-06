@@ -24,3 +24,5 @@
 - If you have time left: Navigate to NotebookLM, upload a Document with an interesting topic of your choice, and [generate the audio output. ](https://support.google.com/notebooklm/answer/16212820?hl=en)
 ![NotebookLM](image-2.png)
 
+- If you have even more time left, create a no-code agent using the [Agent Designer](https://docs.cloud.google.com/gemini/enterprise/docs/agent-designer). This is a preview feature. 
+
