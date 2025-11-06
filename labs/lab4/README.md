@@ -141,11 +141,11 @@ source .venv/bin/activate # On Windows: .venv\Scripts\activate
 # Install the starter pack and create your project
 uv pip install --upgrade agent-starter-pack
 
-# Make sure you are in the right folder
-cd travel_concierge
+# Make sure you are in the right folder (lab4)
+cd lab4
 
 # The `enhance` function of the agent-starter-pack adds deployment resources to your repository
-uvx agent-starter-pack enhance
+uvx agent-starter-pack enhance travel_concierge
 
 # Now we are ready to deploy
 make deploy
