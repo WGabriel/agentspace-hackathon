@@ -1,6 +1,6 @@
-# Google Gemini Enterprise, ADK & MCP Hackathon 🚀
+# **AgentKon**: A Google Gemini Enterprise, ADK & MCP Hackathon 🚀
 
-Welcome to our hands-on hackathon dedicated to exploring and building with Google's powerful agent development tools: **Gemini Enterprise**, the **Agent Development Kit (ADK)**, and **Multi-agent Control Plane (MCP)**.
+Welcome to **AgentKon**, our hands-on hackathon dedicated to exploring and building with Google's powerful agent development tools: **Gemini Enterprise**, the **Agent Development Kit (ADK)**, and **Multi-agent Control Plane (MCP)**.
 
 This repository contains the agenda and resources for our session. Throughout the day, you'll participate in four guided labs and a final group brainstorming exercise to apply your new skills.
 
@@ -11,7 +11,7 @@ This repository contains the agenda and resources for our session. Throughout th
 | Time        | Topic                                                                                              | Presenter / Notes                                                                                                                                                                                                                                                                                                                                    |
 | :---------- | :------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 09:00-09:30 | Arrival & Breakfast| Arrival at our Munich office.<br />Address: Google Germany GmbH, Erika-Mann-Str. 33, 80635 Munich.  <br />Room: "10x". We will serve a breakfast there.|
-| 09:30-09:45 | Welcome & Introduction (Christoph)| - Welcome & Opening Remarks from Christoph Mittendorf<br />- Round of Attendee Introductions (all)|
+| 09:30-09:45 | Welcome & Introduction (Christoph)| - Welcome to **AgentKon** & Opening Remarks from Christoph Mittendorf<br />- Round of Attendee Introductions (all)|
 | 09:45-10:15 | Gemini Enterprise Frontend Demo (Evgeniya)| A short presentation and demo of the Gemini Enterprise frontend.|
 | 10:15-11:00 | [**Lab 1: Environment Setup & No-Code-Agent**](./labs/lab1/README.md) (Gabriel) | - We will provide you with access your temporary Devstar Environment.<br />- We will give you a basic overview of the Google Cloud Console.  <br />- We'll show you how to create your own no-code/low-code agent. Consider using Imagen. Be creative!|
 | 11:00-12:00 | [**Lab 2: Building AI Agents with ADK: The Foundation**](./labs/lab2/README.md) (Christina) | Learn how to build your first custom full-code ADK agent.|
