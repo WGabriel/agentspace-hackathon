@@ -14,13 +14,14 @@
 
 """Planning agent. A pre-booking agent covering the planning part of the trip."""
 
-from google.adk.agents import Agent
+from google.adk.agents import Agent, LlmAgent
 from google.adk.tools.agent_tool import AgentTool
 from google.genai.types import GenerateContentConfig
 from travel_concierge.shared_libraries import types
 from travel_concierge.sub_agents.planning import prompt
 from travel_concierge.tools.memory import memorize
-
+from travel_concierge.tools.search import google_search_grounding
+from travel_concierge.tools.airbnb import airbnb_toolset
 
 itinerary_agent = Agent(
     model="gemini-2.5-flash",
@@ -34,30 +35,25 @@ itinerary_agent = Agent(
     generate_content_config=types.json_response_config,
 )
 
-
-hotel_room_selection_agent = Agent(
-    model="gemini-2.5-flash",
-    name="hotel_room_selection_agent",
-    description="Help users with the room choices for a hotel",
-    instruction=prompt.HOTEL_ROOM_SELECTION_INSTR,
-    disallow_transfer_to_parent=True,
-    disallow_transfer_to_peers=True,
-    output_schema=types.RoomsSelection,
-    output_key="room",
-    generate_content_config=types.json_response_config,
+# Define your main ADK Agent
+airbnb_agent = LlmAgent(
+    model='gemini-2.5-flash',
+    name='AirbnbAgent',
+    instruction=prompt.AIRBNB_AGENT_INSTR,
+    # Add the MCP Toolset to the agent's tools list
+    tools=[airbnb_toolset], 
 )
 
-hotel_search_agent = Agent(
-    model="gemini-2.5-flash",
-    name="hotel_search_agent",
-    description="Help users find hotel around a specific geographic area",
-    instruction=prompt.HOTEL_SEARCH_INSTR,
-    disallow_transfer_to_parent=True,
-    disallow_transfer_to_peers=True,
-    output_schema=types.HotelsSelection,
-    output_key="hotel",
-    generate_content_config=types.json_response_config,
-)
+# hotel_search_agent = Agent(
+#     model="gemini-2.5-flash",
+#     name="hotel_search_agent",
+#     description="Help users find an Airbnb around a specific geographic area",
+#     instruction=prompt.HOTEL_SEARCH_INSTR,
+#     # output_schema=types.HotelsSelection,
+#     output_key="hotel",
+#     generate_content_config=types.json_response_config,
+#     tools=[airbnb_toolset]
+# )
 
 
 flight_seat_selection_agent = Agent(
@@ -93,10 +89,11 @@ planning_agent = Agent(
     tools=[
         AgentTool(agent=flight_search_agent),
         AgentTool(agent=flight_seat_selection_agent),
-        AgentTool(agent=hotel_search_agent),
-        AgentTool(agent=hotel_room_selection_agent),
+        AgentTool(agent=airbnb_agent),
+        # AgentTool(agent=hotel_search_agent),
         AgentTool(agent=itinerary_agent),
         memorize,
+        google_search_grounding,
     ],
     generate_content_config=GenerateContentConfig(
         temperature=0.1, top_p=0.5
