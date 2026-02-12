@@ -40,4 +40,18 @@ To conclude the day, you will form groups and brainstorm a practical application
 3.  **Prepare a pitch:** Create a [one-slider](https://docs.google.com/presentation) outlining your idea.
 4.  **Present:** Each group will select one person to present the idea.
 
+---
+
+## ⚖️ Project Governance & Resources
+
+To ensure a productive and welcoming environment for all participants, please review our project governance documents:
+
+*   📜 [**Code of Conduct**](CODE_OF_CONDUCT.md): Our pledge to a harassment-free experience.
+*   🤝 [**Contributing**](CONTRIBUTING.md): Guidelines for contributing to this project.
+*   📄 [**License**](LICENSE): This project is licensed under the Apache License 2.0.
+*   🛡️ [**Security**](SECURITY.md): How to report security vulnerabilities.
+*   📚 [**Resources**](RESOURCES.md): A collection of Google Generative AI learning materials.
+
+---
+
 Happy building! 🚀
