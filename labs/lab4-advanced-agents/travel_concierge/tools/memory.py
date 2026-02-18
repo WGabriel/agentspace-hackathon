@@ -23,11 +23,16 @@ from google.adk.agents.callback_context import CallbackContext
 from google.adk.sessions.state import State
 from google.adk.tools import ToolContext
 
-from travel_concierge.shared_libraries import constants
+from ..shared_libraries import constants
 
-SAMPLE_SCENARIO_PATH = os.getenv(
-    "TRAVEL_CONCIERGE_SCENARIO", "travel_concierge/profiles/itinerary_empty_default.json"
+# Get the directory of the current file
+_CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+# The profiles directory is one level up from tools/
+_DEFAULT_SCENARIO_PATH = os.path.join(
+    _CURRENT_DIR, "..", "profiles", "itinerary_empty_default.json"
 )
+
+SAMPLE_SCENARIO_PATH = os.getenv("TRAVEL_CONCIERGE_SCENARIO", _DEFAULT_SCENARIO_PATH)
 
 
 def memorize_list(key: str, value: str, tool_context: ToolContext):

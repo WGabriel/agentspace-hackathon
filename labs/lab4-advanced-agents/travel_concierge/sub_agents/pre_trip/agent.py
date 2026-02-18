@@ -16,9 +16,9 @@
 
 from google.adk.agents import Agent
 from google.adk.tools.agent_tool import AgentTool
-from travel_concierge.shared_libraries import types
-from travel_concierge.sub_agents.pre_trip import prompt
-from travel_concierge.tools.search import google_search_grounding
+from ...shared_libraries import types
+from . import prompt
+from ...tools.search import google_search_grounding
 
 
 what_to_pack_agent = Agent(

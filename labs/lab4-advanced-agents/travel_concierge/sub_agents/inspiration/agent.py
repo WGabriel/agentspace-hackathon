@@ -16,9 +16,9 @@
 
 from google.adk.agents import Agent
 from google.adk.tools.agent_tool import AgentTool
-from travel_concierge.shared_libraries.types import DestinationIdeas, POISuggestions, json_response_config
-from travel_concierge.sub_agents.inspiration import prompt
-from travel_concierge.tools.places import map_tool
+from ...shared_libraries.types import DestinationIdeas, POISuggestions, json_response_config
+from . import prompt
+from ...tools.places import map_tool
 
 
 place_agent = Agent(

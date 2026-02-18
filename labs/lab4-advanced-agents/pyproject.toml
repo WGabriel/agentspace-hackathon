@@ -12,11 +12,15 @@ authors = [
 license = "Apache-2.0"
 readme = "README.md"
 dependencies = [
-    "google-cloud-aiplatform[adk,agent-engines]>=1.93.0",
+    "google-cloud-aiplatform[adk,agent-engines]>=1.126.1",
     "pydantic>=2.10.6",
     "python-dotenv>=1.0.1",
     "google-genai>=1.16.1",
-    "google-adk>=1.0.0",
+    "google-adk>=1.18.0",
+    "google-cloud-storage>=3.0.0",
+    "opentelemetry-instrumentation-google-genai",
+    "opentelemetry-exporter-gcp-trace",
+    "opentelemetry-exporter-gcp-logging",
 ]
 
 requires-python = ">=3.10,<3.13"
@@ -104,3 +108,8 @@ example_question = "I want to plan a trip to Seattle"
 
 [tool.agent-starter-pack.settings]
 agent_directory = "travel_concierge"
+
+[[tool.uv.index]]
+name = "pypi"
+url = "https://pypi.org/simple"
+default = true

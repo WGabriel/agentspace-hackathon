@@ -19,8 +19,8 @@ from typing import Dict, Any
 
 from google.adk.agents.readonly_context import ReadonlyContext
 
-from travel_concierge.sub_agents.in_trip import prompt
-from travel_concierge.shared_libraries import constants
+from . import prompt
+from ...shared_libraries import constants
 
 
 def flight_status_check(flight_number: str, flight_date: str, checkin_time: str, departure_time: str):

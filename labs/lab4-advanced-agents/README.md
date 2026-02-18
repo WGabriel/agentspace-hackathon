@@ -92,7 +92,7 @@ In this lab, we'll add a new MCP tool for searching Airbnb listings. MCP servers
   1. First, checkout the branch and install the new dependencies:
 
      ```bash
-           git checkout lab4/agent-enhancemements-knowledge
+           git checkout lab4-advanced-agents/agent-enhancemements-knowledge
            uv sync
      ```
 
@@ -128,46 +128,49 @@ _"Find flights to London from JFK on April 20th for 4 days. Pick any flights and
 
 Without specifically optimizing for such usage, this cohort of agents seem to be able to operate by themselves on your behalf with very little input.
 
-## 🚀 Deploying the Agent 🚀
+## Lab 4.5: Deploying to Agent Engine (Standard Path)
 
-### Step 1: Deploying to Agent Engine
+In this lab, you will deploy your agent to Vertex AI Agent Engine using the standard ADK CLI path. This gives you full control over the deployment process.
+
+### 1. Configure Your Environment
+Ensure your `.env` file has the correct values for deployment. You should have already set these up, but double-check:
+- `GOOGLE_CLOUD_PROJECT`: Your Project ID.
+- `GOOGLE_CLOUD_LOCATION`: The region (e.g., `europe-west3`).
+
+### 2. Deploy the Agent
+Run the deployment command from the `lab4-advanced-agents` directory. We will use `uv run` to ensure we use the correct environment and dependencies.
+
+> [!IMPORTANT]
+> **Deployment Best Practices:**
+> - **Relative Imports**: Ensure your agent uses relative imports (e.g., `from . import prompt`) instead of absolute imports.
+> - **Telemetry**: To enable observability, set `GOOGLE_CLOUD_AGENT_ENGINE_ENABLE_TELEMETRY=true` in your `.env` and include OpenTelemetry packages in `pyproject.toml`.
+> - **Existing Instance**: To update an existing agent, use the `--agent_engine_id` flag.
+
+```bash
+# Deploy or update the agent
+uv run python -m google.adk.cli deploy agent_engine \
+    --project $(grep GOOGLE_CLOUD_PROJECT .env | cut -d '=' -f2) \
+    --region $(grep GOOGLE_CLOUD_LOCATION .env | cut -d '=' -f2) \
+    --agent_engine_id <OPTIONAL_EXISTING_ID> \
+    travel_concierge
+```
+
+### 3. Verify the Deployment
+Once the command finishes, it will output a **Reasoning Engine Resource Name**.
+- **Task:** Copy this resource name. You will need it for the next step.
+- **Check:** Go to the [Vertex AI Agent Engine console](https://console.cloud.google.com/vertex-ai/reasoning-engines) to see your deployed agent.
 
 > **⚡️ Pro Tip: ⚡️**
 >
-> The [Agent Starter Pack](https://goo.gle/agent-starter-pack) can create a production-ready version of this agent for you! It handles the full end-to-end deployment and adds other cool features.
+> For an even more automated experience, the [Agent Starter Pack](https://goo.gle/agent-starter-pack) can handle the full end-to-end deployment, including setting up CI/CD pipelines!
+>
+> ```bash
+> # Optional: Use the starter pack for automated setup
+> uvx agent-starter-pack enhance travel_concierge
+> make deploy
+> ```
 
-Ready to deploy? Let's go!
-
-```bash
-# Make sure that the virtual environment created by uv is still active
-source .venv/bin/activate # On Windows: .venv\Scripts\activate
-
-# Install the starter pack and create your project
-uv pip install --upgrade agent-starter-pack
-
-# Make sure you are in the right folder (lab4-advanced-agents)
-cd lab4-advanced-agents
-
-# The `enhance` function of the agent-starter-pack adds deployment resources to your repository
-uvx agent-starter-pack enhance travel_concierge
-
-# Now we are ready to deploy
-make deploy
-```
-
-You'll be asked a few questions. Here's a cheat sheet:
-
-- **Continue with enhancement?** `Y` 👍
-- **Select base template:** `adk_base` 뼈
-- **Select agent directory:** `travel_concierge` ✈️
-- **Deployment target choice:** `1` 🎯
-- **CI/CD runner choice:** `1` 🏃‍♀️
-- **Desired GCP region:** `us-central1` (or your preferred region) 🌎
-
-Now, confirm your credentials and watch the magic happen! ✨
-
-At the end, the process will have deployed our app to Agent Engine, which is the starting point for integrating it with Gemini Enterprise.
-The output will also give us an ID of a _Reasoning Engine_ Resource. Keep note of it as we will need it later.
+---
 
 ### 🚀 Step 2: Deploy to Gemini Enterprise 🚀
 
