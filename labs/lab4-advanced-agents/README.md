@@ -161,6 +161,8 @@ uv run python -m google.adk.cli deploy agent_engine \
     --staging_bucket gs://$(grep GOOGLE_CLOUD_STORAGE_BUCKET .env | cut -d '=' -f2) \
     --display_name "Travel Concierge Agent" \
     --description "An AI-powered travel assistant that helps plan, book, and manage your trips." \
+    --trace_to_cloud \
+    --otel_to_cloud \
     --agent_engine_id <OPTIONAL_EXISTING_ID> \
     travel_concierge
 ```
