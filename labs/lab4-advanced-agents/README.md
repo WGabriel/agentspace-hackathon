@@ -148,12 +148,19 @@ Run the deployment command from the `lab4-advanced-agents` directory. We will us
 > - **Telemetry**: To enable observability, set `GOOGLE_CLOUD_AGENT_ENGINE_ENABLE_TELEMETRY=true` in your `.env` and include OpenTelemetry packages in `pyproject.toml`.
 > - **Existing Instance**: To update an existing agent, use the `--agent_engine_id` flag.
 
+Generate the requirements.txt file for your uv project with this command. This makes sure the dependencies are properly propagated to Agent Engine.
+```bash
+uv export --no-hashes --no-dev > requirements.txt
+```
+
 ```bash
 # Deploy or update the agent
 uv run python -m google.adk.cli deploy agent_engine \
     --project $(grep GOOGLE_CLOUD_PROJECT .env | cut -d '=' -f2) \
     --region $(grep GOOGLE_CLOUD_LOCATION .env | cut -d '=' -f2) \
     --staging_bucket gs://$(grep GOOGLE_CLOUD_STORAGE_BUCKET .env | cut -d '=' -f2) \
+    --display_name "Travel Concierge Agent" \
+    --description "An AI-powered travel assistant that helps plan, book, and manage your trips." \
     --agent_engine_id <OPTIONAL_EXISTING_ID> \
     travel_concierge
 ```
