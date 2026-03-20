@@ -46,7 +46,7 @@ class Hotel(BaseModel):
     """A hotel from the search."""
     name: str = Field(description="Name of the hotel")
     address: str = Field(description="Full address of the Hotel")
-    check_in_time: Optional[str] = Field(description="Time in HH:MM format, e.g. 16:00")
+    check_in_time: Optional[str]= Field(description="Time in HH:MM format, e.g. 16:00")
     check_out_time: Optional[str] = Field(description="Time in HH:MM format, e.g. 15:30")
     thumbnail: Optional[str] = Field(description="Hotel logo location")
     price: int = Field(description="Price of the room per night")
