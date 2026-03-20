@@ -153,6 +153,7 @@ Run the deployment command from the `lab4-advanced-agents` directory. We will us
 uv run python -m google.adk.cli deploy agent_engine \
     --project $(grep GOOGLE_CLOUD_PROJECT .env | cut -d '=' -f2) \
     --region $(grep GOOGLE_CLOUD_LOCATION .env | cut -d '=' -f2) \
+    --staging_bucket gs://$(grep GOOGLE_CLOUD_STORAGE_BUCKET .env | cut -d '=' -f2) \
     --agent_engine_id <OPTIONAL_EXISTING_ID> \
     travel_concierge
 ```
