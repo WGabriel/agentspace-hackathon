@@ -22,6 +22,7 @@ dependencies = [
     "opentelemetry-exporter-gcp-trace",
     "opentelemetry-exporter-gcp-logging",
     "mcp[cli]>=1.17.0",
+    "opentelemetry-instrumentation-fastapi>=0.59b0",
 ]
 
 requires-python = ">=3.10,<3.13"
