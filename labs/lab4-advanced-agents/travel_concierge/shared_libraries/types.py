@@ -50,6 +50,7 @@ class Hotel(BaseModel):
     check_out_time: Optional[str] = Field(description="Time in HH:MM format, e.g. 15:30")
     thumbnail: Optional[str] = Field(description="Hotel logo location")
     price: int = Field(description="Price of the room per night")
+    airbnb_link: Optional[str] = Field(description="Link to the hotel's Airbnb page")
 
 
 class HotelsSelection(BaseModel):
