@@ -20,9 +20,11 @@ This first lab is all about getting the agent running on your machine.
     After the script finishes, it will remind you to edit the newly created `.env` file.
 
 2.  **Configure Your Environment:**
-    Open the `.env` file in your editor and fill in the required values:
+    Open the `.env` file in your editor and fill in the following values:
     - `GOOGLE_CLOUD_PROJECT`: Your Google Cloud Project ID.
-    - `GOOGLE_PLACES_API_KEY`: Your API Key for the Google Maps Platform Places API. [Click here for instructions on how to get one](https://developers.google.com/maps/documentation/places/web-service/get-api-key).
+    - `GOOGLE_CLOUD_LOCATION`: Your Google Cloud Location, e.g. `us-central1`.
+    - `GOOGLE_CLOUD_STORAGE_BUCKET`: Your Google Cloud Storage Bucket name. This is required for deploying the agent to Agent Engine.
+    - `GOOGLE_PLACES_API_KEY` [OPTIONAL]: Your API Key for the Google Maps Platform Places API. [Click here for instructions on how to get one](https://developers.google.com/maps/documentation/places/web-service/get-api-key).
 
 3.  **Authenticate with Google Cloud:**
     This command allows the application to use your Google Cloud credentials. (not required if you are running in Cloud Shell Editor.)
