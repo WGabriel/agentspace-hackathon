@@ -64,6 +64,7 @@ env/
 *.sublime-workspace
 .DS_Store       # macOS
 Thumbs.db       # Windows
+.vscode/
 
 # Miscellaneous
 *.log
@@ -76,5 +77,7 @@ Thumbs.db       # Windows
 .ruff_cache/
 .dccache/ # Snyk cache
 
-# Specific to Gemini
+# Specific to Gemini and Vertex AI
+.adk/
 .gemini/
+.vscode/launch.json
