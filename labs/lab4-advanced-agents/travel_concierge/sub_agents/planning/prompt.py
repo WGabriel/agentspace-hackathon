@@ -109,7 +109,10 @@ Your goal is to help the traveler by  completing the following information if an
 
 - You only have two tools at your disposal: `hotel_search_agent` and `hotel_room_selection_agent`.
 - Given the derived destination and the interested activities,
-  - Call `hotel_search_agent` and work with the user to select a hotel. When user select the hotel...
+  - Call `hotel_search_agent` and work with the user to select a hotel.
+    The `hotel_search_agent` also has google_search_grounding tool, which can provide all sorts of
+    information to the user about hotel amenities and reviews. Try to be helpful when the user asks for it.
+    When user selects the hotel...
   - Call `hotel_room_selection_agent` to choose a room.
   - Call the `memorize` tool to store the hotel and room selections into the following variables:
     - `hotel_selection` and `room_selection`
@@ -279,11 +282,15 @@ use this for your context.
 """
 
 
-HOTEL_SEARCH_INSTR = """Generate search results for hotels for hotel_location inferred from user query. Find only 4 results.
+HOTEL_SEARCH_INSTR = """Generate search results for hotels for hotel_location inferred from user query. Find only 4 results.    
+                        Use the tool google_search_grounding whenever the user asks for additional info.
+- you have access to the tool google_search_grounding. Access the tool to bring general info about the hotel, such as
+  amenities, star rating, a summary of reviews and any other question about the hotel that the user might ask for.
 - ask for any details you don't know, like check_in_date, check_out_date places_of_interest
 - You must generate non empty json response if the user provides hotel_location
 - today's date is ${{new Date().toLocaleDateString()}}.
-- Please use the context info below for any user preferences
+- Please use the context info below for any user preferences.
+- Also generate a short summary 
 
 Current user:
   <user_profile>
@@ -293,7 +300,7 @@ Current user:
 Current time: {_time}
 Use origin: {origin} and destination: {destination} for your context
 
-Return the response as a JSON object formatted like this:
+Return the response as a JSON object formatted like this. If the user asks for additional details, feel free to add new keys.
  
 {{
   "hotels": [
@@ -304,6 +311,10 @@ Return the response as a JSON object formatted like this:
       "check_out_time": "11:00",      
       "thumbnail": "Hotel logo location , e.g., if hotel is Hilton then output /src/images/hilton.png. if hotel is mariott United use /src/images/mariott.png. if hotel is Conrad  use /src/images/conrad.jpg rest default to /src/images/hotel.png",
       "price": int - "Price of the room per night",
+      "amenities": [
+        "Hotel facilities and amenitites and their description"
+        ],
+      "reviews": "Summary of hotel reviews"
     }},
     {{
       "name": "Name of the hotel",
@@ -312,6 +323,10 @@ Return the response as a JSON object formatted like this:
       "check_out_time": "11:00",           
       "thumbnail": "Hotel logo location , e.g., if hotel is Hilton then output /src/images/hilton.png. if hotel is mariott United use /src/images/mariott.png. if hotel is Conrad  use /src/images/conrad.jpg rest default to /src/images/hotel.png",
       "price": int - "Price of the room per night",
+      "amenities": [
+        "Hotel facilities and amenitites and their description"
+        ],
+      "reviews": "Summary of hotel reviews"
     }},    
   ]
 }}
